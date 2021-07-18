@@ -2015,6 +2015,11 @@
   dependencies:
     "@types/unist" "*"
 
+"@types/node@^16.3.3":
+  "integrity" "sha512-8h7k1YgQKxKXWckzFCMfsIwn0Y61UK6tlD6y2lOb3hTOIMlK3t9/QwHOhc81TwU+RMf0As5fj7NPjroERCnejQ=="
+  "resolved" "https://registry.npmjs.org/@types/node/-/node-16.3.3.tgz"
+  "version" "16.3.3"
+
 "@types/object-assign@4.0.30":
   "integrity" "sha1-iUk3HVqZ9Dge4PHfCpt6GH4H5lI="
   "resolved" "https://registry.npmjs.org/@types/object-assign/-/object-assign-4.0.30.tgz"
@@ -8745,6 +8750,11 @@
   "version" "2.2.1"
   dependencies:
     "typescript-compare" "^0.0.2"
+
+"typescript@^4.3.5":
+  "integrity" "sha512-DqQgihaQ9cUrskJo9kIyW/+g0Vxsk8cDtZ52a3NGh0YNTfpUSArXSohyUGnvbPazEPLu398C0UxmKSOrPumUzA=="
+  "resolved" "https://registry.npmjs.org/typescript/-/typescript-4.3.5.tgz"
+  "version" "4.3.5"
 
 "unfetch@^4.2.0":
   "integrity" "sha512-F9p7yYCn6cIW9El1zi0HI6vqpeIvBsr3dSuRO6Xuppb1u5rXpCPmMvLSyECLhybr9isec8Ohl0hPekMVrEinDA=="
