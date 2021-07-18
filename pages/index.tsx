@@ -56,15 +56,15 @@ let data = [
 export async function getServerSideProps({ query }) {
   let images;
   try {
-    // images = await axios.get('http://localhost:4001/images');
+    images = await axios.get('http://localhost:4001/images');
   } catch (e) {
     console.log('please make sure json server is running on port 4001');
   }
 
   return {
     props: {
-      // images: images.data,
-      images: data,
+      images: images.data,
+      // images: data,
     },
   };
 }
