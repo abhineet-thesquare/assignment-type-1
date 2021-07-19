@@ -8,7 +8,7 @@
   "scripts": {
     "build": "next build",
     "dev": "next",
-    "start": "NODE_ENV=production node server.js -p $PORT",
+    "start": "next start -p $PORT",
     "format": "yarn format:index && yarn format:pages && yarn format:src",
     "format:index": "prettier --write \"*.{js,json,md,tsx}\"",
     "format:pages": "prettier --write \"pages/**/*.tsx\"",
