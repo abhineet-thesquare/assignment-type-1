@@ -1,77 +1,144 @@
-import React, {  CSSProperties, useState } from 'react';
+import React, { CSSProperties, useContext, useState } from 'react';
 import Slider, { Settings } from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-
-import httpsWithQuality from '../../utils/httpsWithQuality';
-
-interface ImageInterface {
-  deleted_at: string,
-  is_deleted: boolean,
-  villa: string,
-  coliving: boolean,
-  created_at: string,
-  description: string,
-  updated_at: string,
-  filename: string,
-  image_url: string,
-  file: number,
-  backup_image_of: string,
-  guest_service: boolean,
-  property: number,
-  order: number,
-  page: number
-}
+import ImageDataInterface from '../../interface/imageData';
+import ImageDataContext from '../../contextApi/context/imageDataContext';
+import Listing from './Listing';
+import CarouselHeader from './CarouselHeader';
+import { BsArrowRight, BsArrowLeft } from 'react-icons/bs';
+import {
+  getDisplayTextForSelectOptionFromImageData,
+  getIsIndexValid,
+  getSelectOptionsFromImageDataArray,
+} from './functions/carouselFunc';
+import DropdownSelect from '../common/DropdownSelect';
 
 interface CarouselProps {
-  images: ImageInterface[]
+  imageDataArray: ImageDataInterface[];
+  indexSelected: number;
 }
 
 const Carousel = (props: CarouselProps): JSX.Element => {
+  const { imageDataArray, dispatchImageDataArray } = useContext(
+    ImageDataContext,
+  );
+  dispatchImageDataArray({
+    payload: props.imageDataArray,
+    type: 'SET_IMAGE_DATA',
+  });
+  const indexMax = imageDataArray?.length - 1;
+
+  const indexSelectedDefault = 0;
+
+  const [dropdownSelectedValue, setDropdownSelectedValue] = useState('');
+  const [indexSelected, setIndexSelected] = useState(indexSelectedDefault);
+
+  const iconSize = '20px';
+  const iconColor = 'red';
+  const iconColorDisabled = 'pink';
+
+  const prevArrowIconColor =
+    indexSelected === 0 ? iconColorDisabled : iconColor;
+  const nextArrowIconColor =
+    indexSelected + 1 === imageDataArray.length ? iconColorDisabled : iconColor;
+
+  const afterChange = (indexSelectedUpdated: number): void => {
+    const isIndexValid = getIsIndexValid(indexSelectedUpdated, indexMax);
+    if (!isIndexValid) return;
+    setIndexSelected(indexSelectedUpdated);
+
+    const dropdownSelectedValueUpdated =
+      imageDataArray[indexSelectedUpdated].id;
+    setDropdownSelectedValue(dropdownSelectedValueUpdated);
+  };
+
+  const clickListing = (indexClicked: number): void => {
+    setIndexSelected(indexClicked);
+
+    const dropdownSelectedValueUpdated = imageDataArray[indexClicked].id;
+    setDropdownSelectedValue(dropdownSelectedValueUpdated);
+  };
+
+  const onChangeSelectElement = (selectValue: string): void => {
+    setDropdownSelectedValue(selectValue);
+
+    const indexSelectedUpdated = parseInt(selectValue);
+    setIndexSelected(indexSelectedUpdated);
+  };
+
+  const onSwipe = (swipeDirection: string): void => {
+    let indexSelectedUpdated =
+      swipeDirection === 'left' ? indexSelected - 1 : indexSelected + 1;
+    const isIndexValid = getIsIndexValid(indexSelectedUpdated, indexMax);
+    if (!isIndexValid) return;
+    setIndexSelected(indexSelectedUpdated);
+
+    const dropdownSelectedValueUpdated =
+      imageDataArray[indexSelectedUpdated].id;
+    setDropdownSelectedValue(dropdownSelectedValueUpdated);
+  };
+
   const settings: Settings = {
-    dots: false,
+    arrows: true,
+    dots: true,
     lazyLoad: 'ondemand',
-    infinite: true,
+    prevArrow: <BsArrowLeft size={iconSize} color={prevArrowIconColor} />,
+    nextArrow: <BsArrowRight size={iconSize} color={nextArrowIconColor} />,
+    infinite: false,
     speed: 500,
-    slidesToShow: 1,
+    slidesToShow: 2,
     slidesToScroll: 1,
-    initialSlide: 3,
+    initialSlide: indexSelectedDefault,
     autoplay: true,
-    autoplaySpeed: 6000,
+    autoplaySpeed: 60000,
     responsive: [
       {
-        breakpoint: 1300,
+        breakpoint: 800,
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1,
         },
       },
     ],
+    afterChange: afterChange,
+    onSwipe: onSwipe,
   };
 
   const carouselContainerStyle: CSSProperties = {
-		background: 'white',
-		margin: 'auto',
-		padding: '15px 0px 30px 0px',
-		textAlign: 'center',
-	};
+    background: 'rgb(246, 248, 248)',
+    fontFamily: 'Montserrat,Helvetica,Arial,sans-serif',
+    fontSize: '14px',
+    margin: '30px auto 10px auto',
+    minHeight: '400px',
+    padding: '0px 20px 30px',
+    maxWidth: '750px',
+  };
+
+  const selectOptions = getSelectOptionsFromImageDataArray(imageDataArray);
 
   return (
     <div style={carouselContainerStyle}>
-      <Slider { ...settings }>
-        {props.images.map((image, id) => (
-          <div key={id}>
-            <img
-              src={httpsWithQuality(image.image_url, 450)}
-              alt={image.filename}
-              className="img-responsive"
+      <CarouselHeader headerText={'Apartment Type'} />
+      <DropdownSelect
+        dropdownSelectedValue={dropdownSelectedValue}
+        onChangeSelectElement={onChangeSelectElement}
+        selectOptions={selectOptions}
+      />
+      <Slider {...settings}>
+        {imageDataArray?.map((imageData, index) => (
+          <div key={index}>
+            <Listing
+              imageData={imageData}
+              index={index}
+              indexSelected={indexSelected}
+              clickListing={clickListing}
             />
           </div>
         ))}
       </Slider>
     </div>
   );
-}
-
+};
 
 export default Carousel;
