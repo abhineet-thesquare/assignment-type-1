@@ -10,10 +10,10 @@
     "dev": "next",
     "start": "next start -p $PORT",
     "format": "yarn format:index && yarn format:pages && yarn format:src",
-    "format:index": "prettier --write \"*.{js,json,md}\"",
-    "format:pages": "prettier --write \"pages/**/*.js\"",
-    "format:src": "prettier --write \"src/**/*.{js,md,mdx}\"",
     "mock-server": "json-server --watch ./db.json -p 4001 -d 1000"
+    "format:index": "prettier --write \"*.{js,json,md,tsx}\"",
+    "format:pages": "prettier --write \"pages/**/*.tsx\"",
+    "format:src": "prettier --write \"src/**/*.{js,md,mdx,tsx}\"",
   },
   "dependencies": {
     "@emotion/babel-preset-css-prop": "latest",
