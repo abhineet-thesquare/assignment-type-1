@@ -1,0 +1,32 @@
+# Read more about github actions here:
+# https://help.github.com/en/actions/configuring-and-managing-workflows/configuring-a-workflow
+# https://help.github.com/en/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: Node.js CI
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Install dependencies
+        run: npm ci
+      - name: Run Jest tests
+        run: npm run test
+      # - name: Run ESLint tests
+      #   run: npm run lint
+      - name: Run TypeScript build
+        run: npm run build
+        env:
+          CI: true
