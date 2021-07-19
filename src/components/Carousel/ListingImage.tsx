@@ -9,11 +9,11 @@ interface ListingImageProps {
 const ListingImage = (props: ListingImageProps): JSX.Element => {
   const listingImageStyle: CSSProperties = {
     height: 'auto',
+    marginBottom: '10px',
     maxWidth: '450px',
     minWidth: '300px',
     textAlign: 'center',
     width: '100%',
-    marginBottom: '10px',
   };
 
   return (
